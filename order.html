@@ -161,12 +161,7 @@
       <div class="field"><label>Delivery Notes (optional)</label><textarea id="f-notes" rows="2" placeholder="Buzz code, leave at door, etc."></textarea></div>
     </div>
 
-    <div id="pickup-box" style="margin-top:20px;">
-      <div class="two-col">
-        <div class="field"><label>Your Name *</label><input type="text" id="p-name" placeholder="Your full name"></div>
-        <div class="field"><label>Phone / Email *</label><input type="text" id="p-contact" placeholder="So we can confirm pickup"></div>
-      </div>
-    </div>
+    <div id="pickup-box" style="margin-top:20px;"></div>
   </div>
 
   <!-- STEP 3: SUMMARY -->
@@ -184,12 +179,11 @@
     <h2><span class="stepnum">4</span> Pay &amp; confirm</h2>
     <p style="color:#6b5a3e;font-size:.95rem;margin-bottom:18px;">
       ① Click <strong>"Pay with Square"</strong> — we'll show you the exact total to enter on the secure Square page, where you only need to add your card details.
-      ② After paying, click <strong>"Send Order Details"</strong> so the bakery receives your order and delivery info by email.
+      ② Your order is ready after payment.
     </p>
     <div class="actions">
       <button class="btn" onclick="startPayment()" id="pay-btn" disabled>① Pay with Square</button>
-      <br>
-      <button class="btn secondary" onclick="sendOrder()" id="send-btn" disabled>② Send Order Details to Bakery</button>
+
       <p class="error" id="err-msg"></p>
       <p class="hint">Payment is processed securely by Square. Order details are emailed to masoudoveis@gmail.com.</p>
     </div>
@@ -288,7 +282,7 @@ function recalc(){
   document.getElementById('sum-total').textContent = currentTotalText;
   const hasItems = qty1 + qty2 > 0;
   document.getElementById('pay-btn').disabled = !hasItems;
-  document.getElementById('send-btn').disabled = !hasItems;
+
 }
 
 function field(id){ return document.getElementById(id).value.trim(); }
@@ -302,9 +296,7 @@ function validate(){
       err.textContent = 'Please fill in all delivery address fields.'; return false;
     }
   } else {
-    if(!field('p-name') || !field('p-contact')){
-      err.textContent = 'Please enter your name and contact for pickup.'; return false;
-    }
+
   }
   err.textContent = '';
   return true;
@@ -327,8 +319,7 @@ function orderDetailsText(){
     s += 'Delivery fee: ' + (t.delivery === 0 ? 'FREE' : '$' + t.delivery.toFixed(2)) + '\n';
   } else {
     s += 'PICKUP (Thornhill, ON)\n';
-    s += 'Name: ' + field('p-name') + '\n';
-    s += 'Contact: ' + field('p-contact') + '\n';
+
   }
   s += '--------------------------------\n';
   s += 'TOTAL PAID: ' + currentTotalText + ' CAD\n';
@@ -360,8 +351,6 @@ function copyAmount(){
 function openSquare(){
   document.getElementById('pay-modal').classList.remove('show');
   window.open(SQUARE_URL, '_blank');
-  const btn = document.getElementById('send-btn');
-  btn.disabled = false;
   const err = document.getElementById('err-msg');
   err.style.color = '#2e7d43';
   err.textContent = '✓ Square checkout opened. After paying, click "Send Order Details" below to complete your order.';
@@ -371,13 +360,6 @@ function closeModal(){
   document.getElementById('pay-modal').classList.remove('show');
 }
 
-function sendOrder(){
-  if(!validate()) return;
-  const subject = 'New Order — ' + (qty1 + qty2) + ' box(es) — ' + currentTotalText + (deliveryMode() === 'deliver' ? ' — DELIVERY' : ' — PICKUP');
-  window.location.href = 'mailto:' + BAKERY_EMAIL
-    + '?subject=' + encodeURIComponent(subject)
-    + '&body=' + encodeURIComponent(orderDetailsText());
-}
 
 recalc();
 </script>
