@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Your Order | Firoozeh Oat Flatbread</title>
+<style>
+  :root{
+    --cream:#faf6ee; --wheat:#e8d9b8; --oat:#c9a86a; --bronze:#a67c3d;
+    --brown:#5b4326; --ink:#2e2416; --accent:#b3541e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:Georgia,'Times New Roman',serif;background:var(--cream);color:var(--ink);line-height:1.6;}
+  a{text-decoration:none;}
+
+  header{background:rgba(250,246,238,.95);border-bottom:1px solid var(--wheat);}
+  .nav{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;}
+  .logo{display:flex;align-items:center;gap:10px;font-size:1.25rem;color:var(--brown);font-weight:700;}
+  .back{color:var(--bronze);font-size:.95rem;}
+  .back:hover{color:var(--accent);}
+
+  .page{max-width:900px;margin:0 auto;padding:40px 24px 80px;}
+  h1{color:var(--brown);font-size:clamp(1.7rem,4vw,2.4rem);margin-bottom:6px;text-align:center;}
+  .sub{text-align:center;color:#7a6847;margin-bottom:40px;}
+
+  .panel{background:#fff;border:1px solid var(--wheat);border-radius:16px;padding:32px;margin-bottom:28px;box-shadow:0 6px 20px rgba(91,67,38,.07);}
+  .panel h2{color:var(--brown);font-size:1.2rem;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+  .stepnum{width:30px;height:30px;background:var(--bronze);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+
+  .qty-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px dashed var(--wheat);flex-wrap:wrap;}
+  .qty-row:last-child{border-bottom:none;}
+  .qty-info strong{color:var(--brown);font-size:1.05rem;}
+  .qty-info span{display:block;font-size:.88rem;color:#7a6847;}
+  .qty-control{display:flex;align-items:center;gap:14px;}
+  .qty-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--oat);background:#fff;color:var(--brown);font-size:1.3rem;cursor:pointer;font-family:inherit;line-height:1;transition:background .2s;}
+  .qty-btn:hover{background:var(--wheat);}
+  .qty-val{width:40px;text-align:center;font-size:1.4rem;font-weight:700;color:var(--brown);font-family:inherit;}
+  .line-total{min-width:70px;text-align:right;color:var(--accent);font-weight:700;font-size:1.1rem;}
+
+  .radio-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .radio-card{flex:1;min-width:220px;border:2px solid var(--wheat);border-radius:12px;padding:18px;cursor:pointer;transition:border-color .2s,background .2s;}
+  .radio-card input{margin-right:8px;accent-color:var(--accent);}
+  .radio-card:has(input:checked){border-color:var(--accent);background:#fdf3ea;}
+  .radio-card strong{color:var(--brown);display:block;margin-bottom:4px;}
+  .radio-card small{color:#7a6847;}
+  .free-tag{background:#4a7c59;color:#fff;font-size:.7rem;padding:2px 10px;border-radius:12px;margin-left:6px;letter-spacing:.5px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:.9rem;color:var(--brown);font-weight:700;margin-bottom:6px;}
+  .field input,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--wheat);border-radius:10px;font-size:1rem;font-family:inherit;background:#fffdf8;color:var(--ink);}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+  .summary{background:var(--brown);color:var(--cream);border:none;}
+  .summary h2{color:var(--wheat);}
+  .sum-row{display:flex;justify-content:space-between;padding:8px 0;font-size:1rem;border-bottom:1px solid rgba(232,217,184,.25);}
+  .sum-row.free{color:#9fd4a8;}
+  .sum-total{display:flex;justify-content:space-between;padding-top:16px;font-size:1.5rem;font-weight:700;color:var(--wheat);}
+  .sum-total span:last-child{color:#fff;}
+  .weight-note{text-align:center;font-size:.85rem;color:var(--oat);margin-top:12px;}
+
+  .actions{text-align:center;margin-top:10px;}
+  .btn{display:inline-block;background:var(--accent);color:#fff;padding:14px 36px;border-radius:40px;font-size:1.05rem;font-weight:700;letter-spacing:.5px;box-shadow:0 4px 14px rgba(179,84,30,.35);cursor:pointer;border:none;font-family:inherit;transition:transform .2s,box-shadow .2s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(179,84,30,.45);}
+  .btn.secondary{background:#fff;color:var(--accent);border:2px solid var(--accent);box-shadow:none;margin-top:14px;}
+  .btn.secondary:hover{background:#fdf3ea;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+  .hint{font-size:.85rem;color:#7a6847;margin-top:14px;}
+  .error{color:#c0392b;font-size:.9rem;margin-top:10px;min-height:1.4em;}
+
+  footer{background:var(--ink);color:#b8a888;text-align:center;padding:26px 24px;font-size:.88rem;}
+
+  @media(max-width:640px){ .two-col{grid-template-columns:1fr;} .line-total{min-width:auto;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a67c3d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M12 8c-3 0-4-3-4-5 3 0 4 2 4 5z"/><path d="M12 8c3 0 4-3 4-5-3 0-4 2-4 5z"/><path d="M12 13c-3 0-4-3-4-5 3 0 4 2 4 5z"/><path d="M12 13c3 0 4-3 4-5-3 0-4 2-4 5z"/><path d="M12 18c-3 0-4-3-4-5 3 0 4 2 4 5z"/><path d="M12 18c3 0 4-3 4-5-3 0-4 2-4 5z"/></svg>
+      FIROOZEH — Order
+    </div>
+    <a class="back" href="index.html">← Back to shop</a>
+  </div>
+</header>
+
+<div class="page">
+  <h1>Place Your Order</h1>
+  <p class="sub">Twice-baked oat flatbread — baked fresh in Thornhill, Ontario</p>
+
+  <!-- STEP 1: QUANTITY -->
+  <div class="panel">
+    <h2><span class="stepnum">1</span> How many boxes would you like?</h2>
+    <div class="qty-row">
+      <div class="qty-info">
+        <strong>1 kg Box — 32 pieces</strong>
+        <span>Best value · $21.00 per box</span>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty('q1',-1)">−</button>
+        <span class="qty-val" id="q1-val">0</span>
+        <button class="qty-btn" onclick="changeQty('q1',1)">+</button>
+      </div>
+      <div class="line-total" id="q1-total">$0.00</div>
+    </div>
+    <div class="qty-row">
+      <div class="qty-info">
+        <strong>0.5 kg Box — 16 pieces</strong>
+        <span>Perfect for trying · $12.00 per box</span>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty('q2',-1)">−</button>
+        <span class="qty-val" id="q2-val">0</span>
+        <button class="qty-btn" onclick="changeQty('q2',1)">+</button>
+      </div>
+      <div class="line-total" id="q2-total">$0.00</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: DELIVERY -->
+  <div class="panel">
+    <h2><span class="stepnum">2</span> Delivery or pickup?</h2>
+    <div class="radio-row">
+      <label class="radio-card">
+        <input type="radio" name="delivery" value="pickup" checked onchange="toggleDelivery()">
+        <strong>Pickup — Free</strong>
+        <small>Pick up your order in Thornhill, ON. We'll confirm the address by email.</small>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="delivery" value="deliver" onchange="toggleDelivery()">
+        <strong>GTA Toronto Delivery <span class="free-tag">FREE over 10 kg</span></strong>
+        <small>$10 flat fee for orders under 10 kg · Free for orders over 10 kg total weight.</small>
+      </label>
+    </div>
+
+    <div id="address-box" style="display:none;margin-top:24px;">
+      <div class="two-col">
+        <div class="field"><label>Full Name *</label><input type="text" id="f-name" placeholder="Your full name"></div>
+        <div class="field"><label>Phone *</label><input type="tel" id="f-phone" placeholder="(416) 000-0000"></div>
+      </div>
+      <div class="field"><label>Street Address *</label><input type="text" id="f-street" placeholder="123 Main Street, Unit/Apt"></div>
+      <div class="two-col">
+        <div class="field"><label>City *</label><input type="text" id="f-city" placeholder="Toronto, Richmond Hill, Markham…"></div>
+        <div class="field"><label>Postal Code *</label><input type="text" id="f-postal" placeholder="M1M 1M1"></div>
+      </div>
+      <div class="field"><label>Delivery Notes (optional)</label><textarea id="f-notes" rows="2" placeholder="Buzz code, leave at door, etc."></textarea></div>
+    </div>
+
+    <div id="pickup-box" style="margin-top:20px;">
+      <div class="two-col">
+        <div class="field"><label>Your Name *</label><input type="text" id="p-name" placeholder="Your full name"></div>
+        <div class="field"><label>Phone / Email *</label><input type="text" id="p-contact" placeholder="So we can confirm pickup"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: SUMMARY -->
+  <div class="panel summary">
+    <h2><span class="stepnum">3</span> Order Summary</h2>
+    <div class="sum-row"><span id="sum-q1">1 kg box × 0</span><span id="sum-q1-p">$0.00</span></div>
+    <div class="sum-row"><span id="sum-q2">0.5 kg box × 0</span><span id="sum-q2-p">$0.00</span></div>
+    <div class="sum-row" id="sum-del-row"><span>GTA Delivery (total weight: <span id="sum-weight">0</span> kg)</span><span id="sum-del">—</span></div>
+    <div class="sum-total"><span>Total</span><span id="sum-total">$0.00</span></div>
+    <p class="weight-note" id="weight-msg"></p>
+  </div>
+
+  <!-- STEP 4: PAY & SEND -->
+  <div class="panel">
+    <h2><span class="stepnum">4</span> Pay &amp; confirm</h2>
+    <p style="color:#6b5a3e;font-size:.95rem;margin-bottom:18px;">
+      ① Click <strong>"Pay with Square"</strong> to open our secure checkout and complete your payment.
+      ② After paying, come back here and click <strong>"Send Order Details"</strong> so we receive your order by email and can bake &amp; deliver it.
+    </p>
+    <div class="actions">
+      <button class="btn" onclick="paySquare()" id="pay-btn" disabled>① Pay with Square</button>
+      <br>
+      <button class="btn secondary" onclick="sendOrder()" id="send-btn" disabled>② Send Order Details to Bakery</button>
+      <p class="error" id="err-msg"></p>
+      <p class="hint">Payment is processed securely by Square. Order details are emailed to masoudoveis@gmail.com.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>FIROOZEH OAT BAKERY</strong> &middot; Thornhill, Ontario, Canada &middot; © 2026</p>
+</footer>
+
+<script>
+const PRICE_1KG = 21, PRICE_HALF = 12, DELIVERY_FEE = 10, FREE_THRESHOLD = 10;
+const SQUARE_URL = "https://checkout.square.site/merchant/MLWG9W9ZZ947A/checkout/DCH4TBMQODVVIK7E2WIX66LM?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZBAxMjE3OTgxNjQ0ODc5NjI4AAGnC8Omh36ZnfOUnm1CitGT1oUNVoTA3D0ggpb7w-3V0ZJXEy5nD-NKjSZviZQ_aem_INMWAuluzskQOg1rKK3hKQ&utm_id=97760_v0_s00_e0_tv3";
+const BAKERY_EMAIL = "masoudoveis@gmail.com";
+let qty1 = 0, qty2 = 0, paid = false;
+
+function changeQty(which, delta){
+  if(which === 'q1'){ qty1 = Math.max(0, qty1 + delta); }
+  else { qty2 = Math.max(0, qty2 + delta); }
+  recalc();
+}
+
+function deliveryMode(){
+  return document.querySelector('input[name="delivery"]:checked').value;
+}
+
+function toggleDelivery(){
+  const deliver = deliveryMode() === 'deliver';
+  document.getElementById('address-box').style.display = deliver ? 'block' : 'none';
+  document.getElementById('pickup-box').style.display = deliver ? 'none' : 'block';
+  recalc();
+}
+
+function totals(){
+  const sub = qty1 * PRICE_1KG + qty2 * PRICE_HALF;
+  const weight = qty1 * 1 + qty2 * 0.5;
+  const deliver = deliveryMode() === 'deliver';
+  const delivery = deliver ? (weight > FREE_THRESHOLD ? 0 : DELIVERY_FEE) : 0;
+  return { sub, weight, deliver, delivery, total: sub + delivery };
+}
+
+function recalc(){
+  const t = totals();
+  document.getElementById('q1-val').textContent = qty1;
+  document.getElementById('q2-val').textContent = qty2;
+  document.getElementById('q1-total').textContent = '$' + (qty1 * PRICE_1KG).toFixed(2);
+  document.getElementById('q2-total').textContent = '$' + (qty2 * PRICE_HALF).toFixed(2);
+  document.getElementById('sum-q1').textContent = '1 kg box (32 pcs) × ' + qty1;
+  document.getElementById('sum-q2').textContent = '0.5 kg box (16 pcs) × ' + qty2;
+  document.getElementById('sum-q1-p').textContent = '$' + (qty1 * PRICE_1KG).toFixed(2);
+  document.getElementById('sum-q2-p').textContent = '$' + (qty2 * PRICE_HALF).toFixed(2);
+
+  const delRow = document.getElementById('sum-del-row');
+  const delSpan = document.getElementById('sum-del');
+  if(t.deliver){
+    delRow.style.display = 'flex';
+    document.getElementById('sum-weight').textContent = t.weight;
+    if(t.weight > FREE_THRESHOLD){
+      delSpan.textContent = 'FREE';
+      delSpan.parentElement.classList.add('free');
+    } else {
+      delSpan.textContent = '$' + t.delivery.toFixed(2);
+      delSpan.parentElement.classList.remove('free');
+    }
+    document.getElementById('weight-msg').textContent =
+      t.weight > FREE_THRESHOLD
+        ? '🎉 You qualify for FREE GTA delivery!'
+        : 'Order over 10 kg total weight to get FREE GTA delivery.';
+  } else {
+    delRow.style.display = 'none';
+    document.getElementById('weight-msg').textContent = '';
+  }
+
+  document.getElementById('sum-total').textContent = '$' + t.total.toFixed(2);
+  const hasItems = qty1 + qty2 > 0;
+  document.getElementById('pay-btn').disabled = !hasItems;
+  document.getElementById('send-btn').disabled = !hasItems;
+}
+
+function field(id){ return document.getElementById(id).value.trim(); }
+
+function validate(){
+  const err = document.getElementById('err-msg');
+  if(qty1 + qty2 === 0){ err.textContent = 'Please select at least one box.'; return false; }
+  if(deliveryMode() === 'deliver'){
+    if(!field('f-name') || !field('f-phone') || !field('f-street') || !field('f-city') || !field('f-postal')){
+      err.textContent = 'Please fill in all delivery address fields.'; return false;
+    }
+  } else {
+    if(!field('p-name') || !field('p-contact')){
+      err.textContent = 'Please enter your name and contact for pickup.'; return false;
+    }
+  }
+  err.textContent = '';
+  return true;
+}
+
+function orderDetailsText(){
+  const t = totals();
+  let s = 'NEW ORDER — FIROOZEH OAT FLATBREAD\n';
+  s += '================================\n';
+  s += '1 kg boxes (32 pcs): ' + qty1 + '  x $' + PRICE_1KG + ' = $' + (qty1*PRICE_1KG).toFixed(2) + '\n';
+  s += '0.5 kg boxes (16 pcs): ' + qty2 + '  x $' + PRICE_HALF + ' = $' + (qty2*PRICE_HALF).toFixed(2) + '\n';
+  s += 'Total weight: ' + t.weight + ' kg\n';
+  s += '--------------------------------\n';
+  if(t.deliver){
+    s += 'DELIVERY: GTA Toronto\n';
+    s += 'Name: ' + field('f-name') + '\n';
+    s += 'Phone: ' + field('f-phone') + '\n';
+    s += 'Address: ' + field('f-street') + ', ' + field('f-city') + ', ' + field('f-postal') + '\n';
+    if(field('f-notes')) s += 'Notes: ' + field('f-notes') + '\n';
+    s += 'Delivery fee: ' + (t.delivery === 0 ? 'FREE' : '$' + t.delivery.toFixed(2)) + '\n';
+  } else {
+    s += 'PICKUP (Thornhill, ON)\n';
+    s += 'Name: ' + field('p-name') + '\n';
+    s += 'Contact: ' + field('p-contact') + '\n';
+  }
+  s += '--------------------------------\n';
+  s += 'TOTAL PAID: $' + t.total.toFixed(2) + ' CAD\n';
+  s += 'Payment: Square checkout\n';
+  s += '================================\n';
+  s += 'Sent from the Firoozeh order page.';
+  return s;
+}
+
+function paySquare(){
+  if(!validate()) return;
+  window.open(SQUARE_URL, '_blank');
+  paid = true;
+  const btn = document.getElementById('send-btn');
+  btn.disabled = false;
+  document.getElementById('err-msg').style.color = '#2e7d43';
+  document.getElementById('err-msg').textContent = '✓ Square checkout opened. After paying, click "Send Order Details" below.';
+}
+
+function sendOrder(){
+  if(!validate()) return;
+  const t = totals();
+  const subject = 'New Order — ' + (qty1 + qty2) + ' box(es) — $' + t.total.toFixed(2) + (t.deliver ? ' — DELIVERY' : ' — PICKUP');
+  window.location.href = 'mailto:' + BAKERY_EMAIL
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(orderDetailsText());
+}
+
+recalc();
+</script>
+
+</body>
+</html>
